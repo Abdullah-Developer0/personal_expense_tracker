@@ -5,6 +5,7 @@ def show_menu():
     print("2. show all expenses")
     print("3. Exit")
     # here we did not write any return becuase the function only prints, nothing coming back.
+
 def add_expense(expenses):
     amount_input = input("Enter The Amount: ")
 
@@ -25,20 +26,47 @@ def add_expense(expenses):
         print ("category cannot be wmpty, expense not added")
         return
 
-    expense = {"amount": amount, "category": category}
+    expense = {"amount": amount, "category": category} # create a dictonary to store to values under one key
     expenses.append(expense)
 
     print("Expense added SUCCESSFULLY.")
 
+def show_expenses(expenses):
+    if len(expenses) == 0:
+        print("no expenses recorded yet.")
+        return
 
+    print("\n === All Expenses ===")
+    for index, expense in enumerate(expenses, start=1): # enumerate() returns a pair (tuple) for each item:(number, item), starting from zero by default & start=1 makes counting begin at 1 instead of 0.
+        print(f"{index}. {expense['category']} - ${expense['amount']}")
 
+def delete_expense(expenses):
+    if len(expenses) == 0: # check if the list is empty
+        print("No expesnes to delete.")
+        return
+
+    show_expenses(expenses)
+    choice = input("Enter the number of the expense to delete: ")
+
+    try:
+        index = int(choice)
+    except ValueError:
+        print("Invalid input, please enter a number.")
+        return
+
+    if index < 1 or index > len(expenses):
+        print("No expense with that number.")
+        return
+
+    removed = expenses.pop(index - 1) # number the user sees (starts at 1) and Python's internal index (starts at 0) & pop() is a list method that removed an item
+    print(f"Deleted: {removed['category']} - ${removed['amount']}")
 
 
 def main():
     expenses = []
     while True:
         show_menu()
-        choice = input("choose an Option: ") # the input always return a string, so vhoice variable is string also
+        choice = input("choose an Option: ") # the input always return a string, so choice variable is string also
 
         if choice == "1":
             add_expense(expenses)
