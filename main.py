@@ -61,6 +61,23 @@ def delete_expense(expenses):
     removed = expenses.pop(index - 1) # number the user sees (starts at 1) and Python's internal index (starts at 0) & pop() is a list method that removed an item
     print(f"Deleted: {removed['category']} - ${removed['amount']}")
 
+def show_summary(expenses):
+    if len(expenses) == 0:
+        print("No expenses to summarize.")
+        return
+
+    amounts = [expense["amount"] for expense in expenses] # storing numbers in a list
+    categories = {expense[category] for expense in expenses} # storing the categoris from dict.. to set, set: don't reapet items
+
+    total = sum(amounts)
+    highest = max(amounts)
+    lowest = min(amounts)
+
+    print("\n=== Summary ===")
+    print(f"Total: ${total}")
+    print(f"Highest expense: ${highest}")
+    print(f"Lowest expense: ${lowest}")
+    print(f"Categories used: {', '.join(categories)}")
 
 def main():
     expenses = []
