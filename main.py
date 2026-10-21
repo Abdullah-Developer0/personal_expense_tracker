@@ -1,3 +1,5 @@
+import json
+import datetime
 
 def show_menu():
     print("\n=== Expense tracker ===") # \n adds a blank line before the title for readability.
@@ -26,10 +28,39 @@ def add_expense(expenses):
         print ("category cannot be wmpty, expense not added")
         return
 
+    today = datetime.date.today()
+    date_str = today.strftime("%Y-%m")
+
     expense = {"amount": amount, "category": category} # create a dictonary to store to values under one key
     expenses.append(expense)
 
     print("Expense added SUCCESSFULLY.")
+
+def show_monthly_report(expenses):
+    if len(expesnes) == 0:
+        print("No expenses to report.")
+        return
+
+    monthly_totals = {}
+
+    for expense in expenses:
+        if "month" in expense:
+            month = expense["month"]
+        else:
+            month = "unknown"
+
+        amount = expense["amount"]
+
+        if month in monthly_totals:
+            monthly_totals[month] = monthly_totals[month] + amount
+        else:
+            monthly_totals[month] = month
+
+    print("\n=== Monthly Report ===")
+    for month, total in monthly_totals.items():
+        print(f"{month}: ${total}")
+
+
 
 def show_expenses(expenses):
     if len(expenses) == 0:
@@ -78,6 +109,28 @@ def show_summary(expenses):
     print(f"Highest expense: ${highest}")
     print(f"Lowest expense: ${lowest}")
     print(f"Categories used: {', '.join(categories)}")
+
+def save_expenses(expenses):
+    with open("expenses.json", "w") as file:
+        json.dump(expenses, file)
+
+    print("Expenses saved to file.")
+
+
+def load_expenses():
+    try:
+        with open("expenses.json", "w") as file:
+            expenses = json.load(file)
+    except FileNotFoundError:
+        expenses = []
+    except json.JSONDecodeError:
+        print("Warning: expenses.json is empty or corrupted. Starting with an empty list (the file will be replaced on the next save).")
+        expenses = []
+
+        return expenses
+
+
+
 
 def main():
     expenses = []
