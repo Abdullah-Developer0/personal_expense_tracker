@@ -31,13 +31,13 @@ def add_expense(expenses):
     today = datetime.date.today()
     date_str = today.strftime("%Y-%m")
 
-    expense = {"amount": amount, "category": category} # create a dictonary to store to values under one key
+    expense = {"amount": amount, "category": category, "month": date_str} # create a dictonary to store to values under one key
     expenses.append(expense)
 
     print("Expense added SUCCESSFULLY.")
 
 def show_monthly_report(expenses):
-    if len(expesnes) == 0:
+    if len(expenses) == 0:
         print("No expenses to report.")
         return
 
@@ -54,7 +54,7 @@ def show_monthly_report(expenses):
         if month in monthly_totals:
             monthly_totals[month] = monthly_totals[month] + amount
         else:
-            monthly_totals[month] = month
+            monthly_totals[month] = amount
 
     print("\n=== Monthly Report ===")
     for month, total in monthly_totals.items():
@@ -98,7 +98,7 @@ def show_summary(expenses):
         return
 
     amounts = [expense["amount"] for expense in expenses] # storing numbers in a list
-    categories = {expense[category] for expense in expenses} # storing the categoris from dict.. to set, set: don't reapet items
+    categories = {expense["category"] for expense in expenses} # storing the categoris from dict.. to set, set: don't reapet items
 
     total = sum(amounts)
     highest = max(amounts)
@@ -119,15 +119,16 @@ def save_expenses(expenses):
 
 def load_expenses():
     try:
-        with open("expenses.json", "w") as file:
+        with open("expenses.json", "r") as file:
             expenses = json.load(file)
     except FileNotFoundError:
         expenses = []
     except json.JSONDecodeError:
-        print("Warning: expenses.json is empty or corrupted. Starting with an empty list (the file will be replaced on the next save).")
+        print("Warning: expenses.json is empty or corrupted. " \
+        "Starting with an empty list (the file will be replaced on the next save).")
         expenses = []
 
-        return expenses
+    return expenses
 
 
 
@@ -140,9 +141,9 @@ def main():
 
         if choice == "1":
             add_expense(expenses)
-        if choice == "2":
+        elif choice == "2":
             print("")
-        if choice == "3":
+        elif choice == "3":
             break
         else:
             print("Invalid Choice, please try again.")
